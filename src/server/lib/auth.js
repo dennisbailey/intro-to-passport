@@ -1,6 +1,7 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var knex = require('../../../db/knex');
+var helpers = require('./helpers.js')
 
 
 passport.use(new LocalStrategy( {usernameField : 'email'}, 
@@ -10,7 +11,6 @@ passport.use(new LocalStrategy( {usernameField : 'email'},
                 
         .then(function (data) {
             // email does not exist
-            console.log('email does not exist!');
             if (!data.length) {
               return done('Incorrect email');
             }
@@ -18,7 +18,8 @@ passport.use(new LocalStrategy( {usernameField : 'email'},
             // email does exist
             var user = data[0];
             
-            if (password === user.password) {
+            if (helpers.comparePassword(password, user.password)) {
+                console.log('user', user);
                 // password is correct
                 console.log('CORRECT!');
                 return done(null, user);
