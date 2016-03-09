@@ -12,7 +12,7 @@
     
     <div class="row">
     
-    <form>
+    <form method="post" action="/login" >
       <label for='email'>email address</label>
       <input type='email' class='email' id='' name='email' placeholder='passport@example.com' required="" />  
       <label for='password'>password</label>
@@ -22,6 +22,18 @@
     </form>
     
     </div>
+    
+    <div class="row">
+      
+      <h3>Your email is…</h3>
+      <p>{{ email }}</p>
+      
+      <h3>Your password is…</h3>
+      <p>{{ password }}</p>
+      
+      
+    </div>
+    
   </div>
 
 {% endblock %}
