@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var passport = ('passport');
+var passport = require('../lib/auth.js');
 var LocalStrategy = require('passport-local').Strategy;
-var knex = require('../../../db/knex')
+var knex = require('../../../db/knex');
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Introduction to Passport' });
@@ -12,18 +12,9 @@ router.get('/login', function(req, res, next) {
   res.render('login', { title: 'Login' });
 });
 
-router.post('/login', function(req, res, next) {
-  
-  var email = req.body.email;
-  var password = req.body.password
-  
-  res.render('login', { 
-    title: 'Login',
-    email : email,
-    password : password 
-    }
-  );
-  
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
 });
 
 
@@ -38,25 +29,35 @@ router.get('/register', function(req, res, next) {
 
 
 router.post('/register', function(req, res, next) {
-  var insert = {}
-  insert.email = req.body.email;
-  insert.password = req.body.password
+  // check for a unique email
+    // if email is in the db tell the user
+    // if the email is not in the db insert it
+ 
+  return knex('users').where({email : req.body.email})
   
-  console.log(insert);
-  return knex('users').insert(insert)
-  
-  .then( function () {    
-    res.render('register', { 
-      title: 'Register',
-      email : email,
-      password : password 
-      }
-    );
+  .then( function () {  
+    res.render ('register', {
+      title : 'Register',
+      message : 'email already exists' 
+    })
   })
   
-  .catch( function ( errors ) { 
-    return next(errors); 
-  });
+  .catch(function () {  
+    var newUser = {}
+    newUser.email = req.body.email;
+    newUser.password = req.body.password
+    
+    return knex('users').insert(newUser)
+    
+    .then( function () {    
+      res.render('/');
+    })    
+    
+    .catch( function ( errors ) { 
+      return next(errors); 
+    });  
+    
+  })
 
   
 });

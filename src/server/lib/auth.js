@@ -1,18 +1,18 @@
-var passport = require('pasport');
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var knex = require('knex');
+var knex = require('../../../db/knex');
 
 
 passport.use(new LocalStrategy( {usernameField : 'email'}, 
-  
+
     function(email, password, done) {
-      
-        return knex('users').where({email : email});
+        return knex('users').where({email : email})
                 
         .then(function (data) {
             // email does not exist
+            console.log('email does not exist!');
             if (!data.length) {
-              return done(null, 'Incorrect email');
+              return done('Incorrect email');
             }
             
             // email does exist
@@ -20,15 +20,17 @@ passport.use(new LocalStrategy( {usernameField : 'email'},
             
             if (password === user.password) {
                 // password is correct
+                console.log('CORRECT!');
                 return done(null, user);
             } else {
                 // password is incorrect
-                return done(null, 'Incorrect password')
+                console.log('incorrect password');
+                return done('Incorrect password')
             }
         })
         
         .catch(function (err) { 
-            return done(null, 'Incorrect email or password');
+            return done('Incorrect email or password');
         });
     })  
         
@@ -41,7 +43,7 @@ passport.serializeUser(function (user, done) {
 });
 
 // Used on subsequent requests to update 'req.user' and update the session
-passport.deserializer(function(id, done) {
+passport.deserializeUser(function(id, done) {
   // find user and return
   knex('users').where({ id : id })
   
