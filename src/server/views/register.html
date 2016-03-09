@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+  <div class="container">
+
+    <h1>{{ title }}</h1>
+    <p>Welcome to {{ title }}</p>
+    
+    <div class="row">
+    
+    <form method="post" action="/login" >
+      <label for='email'>email address</label>
+      <input type='email' class='email' id='' name='email' placeholder='passport@example.com' required="" />  
+      <label for='password'>password</label>
+      <input type='password' class='password' id='' name='password' required="" />
+      <input type='submit' name='submit' value='Submit' />
+      
+    </form>
+    
+    </div>
+    
+  </div>
+
+{% endblock %}
