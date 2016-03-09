@@ -10,6 +10,8 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
+  
+  
   var email = req.body.email;
   var password = req.body.password
   
@@ -20,6 +22,11 @@ router.post('/login', function(req, res, next) {
     }
   );
   
+});
+
+
+router.get('/logout', function(req, res, next) {
+  res.redirect('/');
 });
 
 module.exports = router;
