@@ -11,7 +11,8 @@ router.get('/', helpers.ensureAuthenticated, function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Login' });
+  console.log(req.flash());
+  res.render('login', { message : req.flash('message') });
 });
 
 router.post('/login', function(req, res, next) {
@@ -73,12 +74,18 @@ router.post('/register', function(req, res, next) {
 //     
 //     return knex('users').insert(newUser)
 //     
-  .then( function () {    
-    res.redirect('/');
+  .then( function () {
+      req.flash('message', 
+        { 
+          status : 'success', 
+          message : 'Welcome!'
+        } 
+      )    
+      return res.redirect('/');
   })    
   
   .catch( function ( errors ) { 
-    return next(errors); 
+      return next(errors); 
   });  
   
 });

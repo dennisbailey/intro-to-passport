@@ -33,6 +33,6 @@ function comparePassword(password, hashedPassword) {
 module.exports = {
   ensureAuthenticated : ensureAuthenticated,
   loginRedirect : loginRedirect,
-  hashPassword :hashPassword,
+  hashPassword : hashPassword,
   comparePassword : comparePassword
 };
